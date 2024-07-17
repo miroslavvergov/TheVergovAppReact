@@ -13,7 +13,7 @@ const schema = z.object({
 
 const Login = () => {
     const location = useLocation();
-    const isLoggedIn: boolean = JSON.parse(localStorage.getItem('')!) as boolean || false;
+    const isLoggedIn: boolean = JSON.parse(localStorage.getItem('login')!) as boolean || false;
     const [loginUser, { data, error, isLoading, isSuccess }] = userAPI.useLoginUserMutation();
     const { register, handleSubmit, formState: form, getFieldState } = useForm<IUserRequest>({ resolver: zodResolver(schema), mode: 'onTouched' });
 
