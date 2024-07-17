@@ -1,4 +1,4 @@
-import { IResponse } from "../models/Response";
+import { IResponse } from "../models/IResponse";
 
 export const baseUrl = "http:/localhost:8085/user";
 
