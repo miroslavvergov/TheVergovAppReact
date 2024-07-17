@@ -17,6 +17,8 @@ const Login = () => {
     const [loginUser, { data, error, isLoading, isSuccess }] = userAPI.useLoginUserMutation();
     const { register, handleSubmit, formState: form, getFieldState } = useForm<IUserRequest>({ resolver: zodResolver(schema), mode: 'onTouched' });
 
+    const isFieldValid = (fieldName: keyof IUserRequest): boolean => getFieldState(fieldName, form).isTouched && !getFieldState(fieldName, form).invalid;
+
     const handleLogin = (credentials: IUserRequest) => loginUser(credentials);
 
     if (isLoggedIn) {
