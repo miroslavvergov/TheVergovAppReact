@@ -6,7 +6,7 @@ import {
   processError,
   processResponse,
 } from "../utils/requestutils";
-import { User } from "../models/IUser";
+import { QrCodeRequest, User } from "../models/IUser";
 import { IUserRequest } from "../models/ICredentials";
 
 export const userAPI = createApi({
@@ -36,6 +36,16 @@ export const userAPI = createApi({
       }),
       transformResponse: processResponse<User>,
       transformErrorResponse: processError
+    }),
+    verifyQrCode: builder.mutation<IResponse<User>, QrCodeRequest>({
+      query: (qrCodeRequest) => ({
+        url: '/verify/qrcode',
+        method: 'POST',
+        body: qrCodeRequest
+      }),
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
   }),
 });
