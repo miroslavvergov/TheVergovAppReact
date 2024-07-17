@@ -2,11 +2,20 @@ import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom';
 import { userAPI } from '../services/UserService';
 import { IUserRequest } from '../models/ICredentials';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+
+const schema = z.object({
+    email: z.string().min(3, 'Email is required').email('Invalid email address'),
+    password: z.string().min(5, 'Password is required')
+})
 
 const Login = () => {
     const location = useLocation();
     const isLoggedIn: boolean = JSON.parse(localStorage.getItem('')!) as boolean || false;
     const [loginUser, { data, error, isLoading, isSuccess }] = userAPI.useLoginUserMutation();
+    const { register, handleSubmit, formState: form, getFieldState } = useForm<IUserRequest>({ resolver: zodResolver(schema), mode: 'onTouched' });
 
     const handleLogin = (credentials: IUserRequest) => loginUser(credentials);
 
