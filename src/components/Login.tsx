@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { QrCodeRequest } from '../models/IUser';
+import { Key } from '../enum/cache.key';
 
 const loginSchema = z.object({
     email: z.string().min(3, 'Email is required').email('Invalid email address'),
@@ -23,9 +24,9 @@ const qrCodeSchema = z.object({
 });
 const Login = () => {
     const location = useLocation();
-    const isLoggedIn: boolean = JSON.parse(localStorage.getItem('login')!) as boolean || false;
+    const isLoggedIn: boolean = JSON.parse(localStorage.getItem(Key.LOGGEDIN)!) as boolean || false;
     const [loginUser, { data, error, isLoading, isSuccess }] = userAPI.useLoginUserMutation();
-    const [verifyQrCode, { data: qrCodeData, error: qrCodeError, isLoading: qrCodeLoading, isSuccess: qrCodeSuccess }]
+    const [verifyQrCode, { data: _, error: qrCodeError, isLoading: qrCodeLoading, isSuccess: qrCodeSuccess }]
     const { register, handleSubmit, formState: form, getFieldState } = useForm<IUserRequest>({ resolver: zodResolver(loginSchema), mode: 'onTouched' });
     const { register: qrCodeRegister, handleSubmit: submitQrCode, formState: qrCodeForm, getFieldState: getQrCodeField } = useForm<QrCodeRequest>({ resolver: zodResolver(qrCodeSchema), mode: 'onTouched' });
 
@@ -48,7 +49,7 @@ const Login = () => {
             <Navigate to={'/'} replace />
     }
     if (isSuccess && (!data?.data.user.mfa)) {
-        localStorage.setItem('login', 'true');
+        localStorage.setItem(Key.LOGGEDIN, 'true');
         return location?.state?.from?.pathname
             ?
             <Navigate to={location?.state?.from?.pathname} replace />
@@ -57,7 +58,7 @@ const Login = () => {
     }
 
     if (qrCodeSuccess && data?.data.user.mfa) {
-        localStorage.setItem('login', 'true');
+        localStorage.setItem(Key.LOGGEDIN, 'true');
         return location?.state?.from?.pathname
             ?
             <Navigate to={location?.state?.from?.pathname} replace />
