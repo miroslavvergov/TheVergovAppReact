@@ -2,7 +2,7 @@ import React from 'react'
 import { useLocation } from 'react-router-dom';
 import { userAPI } from '../services/UserService';
 
-function Verify() {
+function VerifyAccount() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search)
     // needs to be 'token' not 'key'
@@ -38,4 +38,4 @@ function Verify() {
     )
 }
 
-export default Verify
+export default VerifyAccount
