@@ -7,7 +7,7 @@ import {
   processResponse,
 } from "../utils/requestutils";
 import { QrCodeRequest, User } from "../models/IUser";
-import { IRegisterRequest, IUserRequest } from "../models/ICredentials";
+import { EmailAddress, IRegisterRequest, IUserRequest, UpdateNewPassword } from "../models/ICredentials";
 import { Http } from "../enum/http.method";
 
 export const userAPI = createApi({
@@ -37,6 +37,7 @@ export const userAPI = createApi({
       }),
       transformResponse: processResponse<User>,
       transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
     }),
     registerUser: builder.mutation<IResponse<void>, IRegisterRequest>({
       query: (registerRequest) => ({
@@ -44,7 +45,9 @@ export const userAPI = createApi({
         method: Http.POST,
         body: registerRequest,
       }),
+      transformResponse: processResponse<void>,
       transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
     }),
     verifyAccount: builder.mutation<IResponse<void>, string>({
       query: (token) => ({
@@ -52,7 +55,18 @@ export const userAPI = createApi({
         url: `/verify/account?token=${token}`,
         method: Http.GET
       }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError
+    }),
+    verifyPassword: builder.mutation<IResponse<User>, string>({
+      query: (token) => ({
+        // needs to be token in order to work if it is specified as key it will break
+        url: `/verify/password?token=${token}`,
+        method: Http.GET
+      }),
+      transformResponse: processResponse<User>,
       transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
     }),
     verifyQrCode: builder.mutation<IResponse<User>, QrCodeRequest>({
       query: (qrCodeRequest) => ({
@@ -62,7 +76,28 @@ export const userAPI = createApi({
       }),
       transformResponse: processResponse<User>,
       transformErrorResponse: processError,
-      invalidatesTags: (result, error) => (error ? [] : ["User"]),
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
     }),
+    resetPassword: builder.mutation<IResponse<void>, EmailAddress>({
+      query: (email) => ({
+        url: "/reset-password",
+        method: Http.POST,
+        body: email,
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    doResetPassword: builder.mutation<IResponse<void>, UpdateNewPassword>({
+      query: (passwordrequest) => ({
+        // needs to be token in order to work if it is specified as key it will break
+        url: `/reset-password/reset`,
+        method: Http.POST,
+        body: passwordrequest
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    })
   }),
 });
