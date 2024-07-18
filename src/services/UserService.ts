@@ -46,6 +46,14 @@ export const userAPI = createApi({
       }),
       transformErrorResponse: processError,
     }),
+    verifyAccount: builder.mutation<IResponse<void>, string>({
+      query: (token) => ({
+        // needs to be token in order to work if it is specified as key it will break
+        url: `/verify/account?token=${token}`,
+        method: Http.GET
+      }),
+      transformErrorResponse: processError,
+    }),
     verifyQrCode: builder.mutation<IResponse<User>, QrCodeRequest>({
       query: (qrCodeRequest) => ({
         url: "/verify/qrcode",
