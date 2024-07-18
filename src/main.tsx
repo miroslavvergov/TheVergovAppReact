@@ -9,7 +9,7 @@ import { Provider } from 'react-redux';
 import NavBar from './components/NavBar.tsx';
 import Papers from './components/papers/Papers.tsx';
 import Register from './components/Register.tsx';
-import VerifyAccount from './components/Verify.tsx';
+import VerifyAccount from './components/VerifyAccount.tsx';
 
 const store = setupStore();
 const router = createBrowserRouter(createRoutesFromElements(
