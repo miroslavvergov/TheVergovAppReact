@@ -9,12 +9,14 @@ import { Provider } from 'react-redux';
 import NavBar from './components/NavBar.tsx';
 import Papers from './components/papers/Papers.tsx';
 import Register from './components/Register.tsx';
+import Verify from './components/Verify.tsx';
 
 const store = setupStore();
 const router = createBrowserRouter(createRoutesFromElements(
   <Route path='/' element={<App />}>
     <Route path='login' element={<Login />} />
     <Route path='register' element={<Register />} />
+    <Route path='user/verify/account' element={<Verify />} />
     <Route element={<NavBar />}>
       <Route index path='/papers' element={<Papers />} />
       <Route path='/' element={<Navigate to={'/papers'} />} />
