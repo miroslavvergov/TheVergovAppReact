@@ -7,7 +7,8 @@ import {
   processResponse,
 } from "../utils/requestutils";
 import { QrCodeRequest, User } from "../models/IUser";
-import { IUserRequest } from "../models/ICredentials";
+import { IRegisterRequest, IUserRequest } from "../models/ICredentials";
+import { Http } from "../enum/http.method";
 
 export const userAPI = createApi({
   reducerPath: "userAPI",
@@ -21,7 +22,7 @@ export const userAPI = createApi({
     fetchUser: builder.query<IResponse<User>, IUserRequest>({
       query: () => ({
         url: "/profile",
-        method: "GET",
+        method: Http.GET,
       }),
       keepUnusedDataFor: 120,
       transformResponse: processResponse<User>,
@@ -30,22 +31,30 @@ export const userAPI = createApi({
     }),
     loginUser: builder.mutation<IResponse<User>, void>({
       query: (credentials) => ({
-        url: '/login',
-        method: 'POST',
-        body: credentials
-      }),
-      transformResponse: processResponse<User>,
-      transformErrorResponse: processError
-    }),
-    verifyQrCode: builder.mutation<IResponse<User>, QrCodeRequest>({
-      query: (qrCodeRequest) => ({
-        url: '/verify/qrcode',
-        method: 'POST',
-        body: qrCodeRequest
+        url: "/login",
+        method: Http.POST,
+        body: credentials,
       }),
       transformResponse: processResponse<User>,
       transformErrorResponse: processError,
-      invalidatesTags: (result, error) => error ? [] : ['User']
+    }),
+    registerUser: builder.mutation<IResponse<void>, IRegisterRequest>({
+      query: (registerRequest) => ({
+        url: "/register",
+        method: Http.POST,
+        body: registerRequest,
+      }),
+      transformErrorResponse: processError,
+    }),
+    verifyQrCode: builder.mutation<IResponse<User>, QrCodeRequest>({
+      query: (qrCodeRequest) => ({
+        url: "/verify/qrcode",
+        method: Http.POST,
+        body: qrCodeRequest,
+      }),
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"]),
     }),
   }),
 });
