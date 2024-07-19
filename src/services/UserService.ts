@@ -7,7 +7,7 @@ import {
   processResponse,
 } from "../utils/requestutils";
 import { QrCodeRequest, User } from "../models/IUser";
-import { EmailAddress, IRegisterRequest, IUserRequest, UpdateNewPassword } from "../models/ICredentials";
+import { EmailAddress, IRegisterRequest, IUserRequest, UpdateNewPassword, UpdatePassword } from "../models/ICredentials";
 import { Http } from "../enum/http.method";
 
 export const userAPI = createApi({
@@ -124,6 +124,42 @@ export const userAPI = createApi({
         url: `/update-password`,
         method: Http.PATCH,
         body: request
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    toggleAccountExpired: builder.mutation<IResponse<void>, void>({
+      query: () => ({
+        url: `/toggle-account-expired`,
+        method: Http.PATCH
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    toggleAccountLocked: builder.mutation<IResponse<void>, void>({
+      query: () => ({
+        url: `/toggle-account-locked`,
+        method: Http.PATCH
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    toggleAccountEnabled: builder.mutation<IResponse<void>, void>({
+      query: () => ({
+        url: `/toggle-account-enabled`,
+        method: Http.PATCH
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    toggleCredentialsExpired: builder.mutation<IResponse<void>, void>({
+      query: () => ({
+        url: `/toggle-credentials-expired`,
+        method: Http.PATCH
       }),
       transformResponse: processResponse<void>,
       transformErrorResponse: processError,
