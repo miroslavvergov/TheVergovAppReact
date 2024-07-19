@@ -51,7 +51,7 @@ export const paperAPI = createApi({
         updatePaper: builder.mutation<IResponse<Paper>, PaperForm>({
             query: (paper) => ({
                 // needs to be token in order to work if it is specified as key it will break
-                url: `/`,
+                url: ``,
                 method: Http.PATCH,
                 body: paper
             }),
