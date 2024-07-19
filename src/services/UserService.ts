@@ -118,6 +118,16 @@ export const userAPI = createApi({
       transformResponse: processResponse<User>,
       transformErrorResponse: processError,
       invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    updatePassword: builder.mutation<IResponse<void>, UpdatePassword>({
+      query: (request) => ({
+        url: `/update-password`,
+        method: Http.PATCH,
+        body: request
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
     })
   }),
 });

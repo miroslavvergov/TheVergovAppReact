@@ -9,7 +9,6 @@ const schema = z.object({
   email: z.string().min(3, "Email is required").email("Invalid email address"),
   firstName: z.string().min(1, "First name is required"),
   lastName: z.string().min(1, "Last name is required"),
-  password: z.string().min(5, "Password is required"),
   bio: z.string().min(5, 'Bio is required')
 });
 
@@ -31,7 +30,7 @@ const Profile = () => {
   const [
     update,
     {
-      data: updateData
+      data: updateData,
       isLoading: updateLoading
     },
   ] = userAPI.useUpdateUserMutation();
