@@ -1,6 +1,7 @@
 import React from 'react'
 import { Query } from '../../models/IPaper';
 import { paperAPI } from '../../services/PaperService';
+import PaperLoader from './PaperLoader';
 
 const Papers = () => {
   const inputRef = React.useRef<HTMLInputElement>();
@@ -38,6 +39,12 @@ const Papers = () => {
       await uploadPapers(form);
     }
   };
+
+  if(isLoading) {
+
+    // TODO
+    return <PaperLoader/>
+  }
 
   return (
     // TODO
