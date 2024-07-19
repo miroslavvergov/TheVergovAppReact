@@ -6,7 +6,7 @@ import {
   processError,
   processResponse,
 } from "../utils/requestutils";
-import { QrCodeRequest, User } from "../models/IUser";
+import { QrCodeRequest, Role, User } from "../models/IUser";
 import { EmailAddress, IRegisterRequest, IUserRequest, UpdateNewPassword, UpdatePassword } from "../models/ICredentials";
 import { Http } from "../enum/http.method";
 
@@ -160,6 +160,16 @@ export const userAPI = createApi({
       query: () => ({
         url: `/toggle-credentials-expired`,
         method: Http.PATCH
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    updateRole: builder.mutation<IResponse<void>, Role>({
+      query: (role) => ({
+        url: `/update-role`,
+        method: Http.PATCH,
+        body: role
       }),
       transformResponse: processResponse<void>,
       transformErrorResponse: processError,

@@ -37,6 +37,7 @@ const Password = () => {
     isLoading,
     refetch,
   } = userAPI.useFetchUserQuery();
+  
   const [
     updatePassword,
     {
