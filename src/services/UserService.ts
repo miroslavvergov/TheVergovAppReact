@@ -98,6 +98,26 @@ export const userAPI = createApi({
       transformResponse: processResponse<void>,
       transformErrorResponse: processError,
       invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    updatePhoto: builder.mutation<IResponse<string>, FormData>({
+      query: (form) => ({
+        url: `/photo`,
+        method: Http.PATCH,
+        body: form
+      }),
+      transformResponse: processResponse<string>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    updateUser: builder.mutation<IResponse<User>, IUserRequest>({
+      query: (user) => ({
+        url: `/update`,
+        method: Http.PATCH,
+        body: user
+      }),
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
     })
   }),
 });

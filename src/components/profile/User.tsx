@@ -1,9 +1,41 @@
-import React from 'react'
+import React from "react";
+import { userAPI } from "../../services/UserService";
 
 const User = () => {
-  return (
-    <div>User</div>
-  )
-}
+  const inputRef = React.useRef<HTMLInputElement>(null);
+  const {
+    data: userData,
+    error,
+    isSuccess,
+    isLoading,
+    refetch,
+  } = userAPI.useFetchUserQuery();
+  const [
+    updatePhoto,
+    {
+      data: photoData,
+      error: photoError,
+      isLoading: photoLoading,
+      isSuccess: photoSuccess,
+    },
+  ] = userAPI.useUpdatePhotoMutation();
 
-export default User
+  const selectImage = () => inputRef.current.click();
+
+  const uploadPhoto = async (file: File) => {
+    if (file) {
+      const form = new FormData();
+      form.append("userId", userData.data.user.userId);
+      form.append("file", file, file.name);
+      await updatePhoto(form);
+      // call API
+    }
+  };
+
+  return (
+    // TODO
+    <div>User</div>
+  );
+};
+
+export default User;
