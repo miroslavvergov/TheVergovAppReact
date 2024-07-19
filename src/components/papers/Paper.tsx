@@ -1,7 +1,9 @@
 import React from 'react'
+import { IPaper } from '../../models/IPaper'
 
-function Paper() {
+const Paper = (paper: IPaper) => {
   return (
+    // TODO
     <div>Paper</div>
   )
 }
