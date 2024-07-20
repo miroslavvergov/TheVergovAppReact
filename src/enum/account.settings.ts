@@ -1,6 +1,7 @@
+// Enum to represent various account settings states
 export enum AccountSettings {
-    EXPIRED = '[ACCOUNT] EXPIRED',
-    LOCKED =  '[ACCOUNT] LOCKED',
-    ENABLED =  '[ACCOUNT] ENABLED',
-    CREDENTIALS_EXPIRED =  '[ACCOUNT] CREDENTIALS_EXPIRED'
+    EXPIRED = '[ACCOUNT] EXPIRED',             // Account is expired
+    LOCKED = '[ACCOUNT] LOCKED',               // Account is locked
+    ENABLED = '[ACCOUNT] ENABLED',             // Account is enabled
+    CREDENTIALS_EXPIRED = '[ACCOUNT] CREDENTIALS_EXPIRED' // Account credentials have expired
 }

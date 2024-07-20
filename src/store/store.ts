@@ -1,24 +1,24 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { userAPI } from "../services/UserService";
-import logger from 'redux-logger';
 import { paperAPI } from "../services/PaperService";
-
+import logger from 'redux-logger';
 
 const rootReducer = combineReducers({
     [userAPI.reducerPath]: userAPI.reducer,
-
     [paperAPI.reducerPath]: paperAPI.reducer
 });
 
 export const setupStore = () => {
+    const isDevelopment = process.env.NODE_ENV === 'development';
+
     return configureStore({
         reducer: rootReducer,
-        middleware: (getDefaultMiddleware) =>
+        middleware: (getDefaultMiddleware) => 
             getDefaultMiddleware({ serializableCheck: false })
                 .concat(userAPI.middleware)
                 .concat(paperAPI.middleware)
-                .concat(logger)
-    })
+                .concat(isDevelopment ? logger : [])
+    });
 };
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { userAPI } from '../../services/UserService';
 import { Role } from '../../models/IUser';
 
 const Authorization = () => {
-
+  // Fetching user data using a query hook from RTK Query
   const {
     data: user,
     error,
@@ -12,6 +12,7 @@ const Authorization = () => {
     refetch,
   } = userAPI.useFetchUserQuery();
 
+  // Mutation hook for updating the user's role
   const [
     updateRole,
     {
@@ -21,12 +22,13 @@ const Authorization = () => {
     },
   ] = userAPI.useUpdateRoleMutation();
 
+  // Handler function to update the user's role
   const onUpdateRole = async (role: Role) => updateRole(role);
 
   return (
-    // TODO
-    <div>Authorization</div>
-  )
+    // TODO: Implement the UI for managing user authorization, including displaying user info and role update functionality
+    <div>Authorization</div> // Placeholder div to be replaced with actual content
+  );
 }
 
-export default Authorization
+export default Authorization;

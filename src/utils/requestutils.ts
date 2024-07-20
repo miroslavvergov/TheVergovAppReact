@@ -2,7 +2,8 @@ import { Key } from "../enum/cache.key";
 import { IResponse } from "../models/IResponse";
 import { toastError, toastSuccess } from "../services/ToastService";
 
-export const baseUrl = "http:/localhost:8085/user";
+// Corrected protocol
+export const baseUrl = "http://localhost:8085/user";
 
 export const isJsonContentType = (headers: Headers) =>
   [
@@ -13,9 +14,15 @@ export const isJsonContentType = (headers: Headers) =>
     "multipart/form-data",
   ].includes(headers.get("content-type")?.trimEnd()!);
 
+interface RequestMeta {
+  request: {
+    url: string;
+  };
+}
+
 export const processResponse = <T>(
   response: IResponse<T>,
-  meta: any,
+  meta: RequestMeta,
   arg: unknown
 ): IResponse<T> => {
   const { request } = meta;
@@ -26,13 +33,16 @@ export const processResponse = <T>(
   if (request.url.includes("profile")) {
     toastSuccess(response.message);
   }
-  console.log({ response });
+  // Optional logging controlled by an environment variable
+  if (process.env.NODE_ENV === 'development') {
+    console.log({ response });
+  }
   return response;
 };
 
 export const processError = (
   error: { status: number; data: IResponse<void> },
-  meta: unknown,
+  meta: RequestMeta,
   arg: unknown
 ): { status: number; data: IResponse<void> } => {
   if (
@@ -43,6 +53,9 @@ export const processError = (
     localStorage.setItem(Key.LOGGEDIN, 'false');
   }
   toastError(error.data.message);
-  console.log({ error });
+  // Optional logging controlled by an environment variable
+  if (process.env.NODE_ENV === 'development') {
+    console.log({ error });
+  }
   return error;
 };

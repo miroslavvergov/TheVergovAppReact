@@ -30,7 +30,10 @@ import NotFound from "./components/NotFound.tsx";
 import PaperDetails from "./components/papers/PaperDetails.tsx";
 import Users from "./components/users/Users.tsx";
 
+// Setting up the Redux store
 const store = setupStore();
+
+// Creating the router using createBrowserRouter and createRoutesFromElements from react-router-dom
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -62,8 +65,10 @@ const router = createBrowserRouter(
   )
 );
 
+// Creating the root element to render the app
 const root = ReactDOM.createRoot(document.getElementById("root")!);
 
+// Rendering the app wrapped with Redux Provider and RouterProvider
 root.render(
   <Provider store={store}>
     <RouterProvider router={router} />

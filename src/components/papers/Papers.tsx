@@ -1,12 +1,15 @@
-import React from 'react'
+import React from 'react';
 import { Query } from '../../models/IPaper';
 import { paperAPI } from '../../services/PaperService';
 import PaperLoader from './PaperLoader';
 
 const Papers = () => {
+  // Ref to the input element for selecting files
   const inputRef = React.useRef<HTMLInputElement>();
+  // State to manage the query parameters for fetching papers
   const [query, setQuery] = React.useState<Query>({ page: 0, size: 4, name: '' });
 
+  // Fetching papers based on the current query
   const {
     data: paperData,
     error,
@@ -15,6 +18,7 @@ const Papers = () => {
     refetch,
   } = paperAPI.useFetchPapersQuery(query);
 
+  // Mutation for uploading papers
   const [
     uploadPapers,
     {
@@ -25,13 +29,17 @@ const Papers = () => {
     },
   ] = paperAPI.useUploadPapersMutation();
 
+  // Function to trigger file selection
   const selectPapers = () => inputRef.current.click();
 
+  // Function to navigate between pages
   const goToPage = async (direction: string) => {
-    direction === 'back' ? setQuery((prev) => { return { ...prev, page: prev.page - 1 } }) : setQuery((prev) => { return { ...prev, page: prev.page + 1 } })
+    direction === 'back' ? 
+      setQuery((prev) => ({ ...prev, page: prev.page - 1 })) : 
+      setQuery((prev) => ({ ...prev, page: prev.page + 1 }));
   }
 
-
+  // Function to handle paper uploads
   const onUploadPapers = async (papers: FileList) => {
     if (papers) {
       const form = new FormData();
@@ -40,16 +48,16 @@ const Papers = () => {
     }
   };
 
-  if(isLoading) {
-
-    // TODO
-    return <PaperLoader/>
+  // Display loader while fetching data
+  if (isLoading) {
+    // TODO: Implement a proper loading spinner or animation
+    return <PaperLoader />
   }
 
   return (
-    // TODO
+    // TODO: Implement the UI for displaying and managing papers
     <div>
-
+      {/* Placeholder div to be replaced with actual content */}
     </div>
   )
 }

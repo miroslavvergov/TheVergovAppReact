@@ -3,9 +3,9 @@ import { IPaper } from '../../models/IPaper'
 
 const Paper = (paper: IPaper) => {
   return (
-    // TODO
-    <div>Paper</div>
-  )
-}
+    // TODO: Implement the display of paper details
+    <div>Paper</div> // Placeholder div to be replaced with actual content
+  );
+};
 
-export default Paper
+export default Paper;

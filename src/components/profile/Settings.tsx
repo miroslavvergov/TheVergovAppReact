@@ -1,9 +1,9 @@
-import React from 'react'
+import React from 'react';
 import { userAPI } from '../../services/UserService';
 import { AccountSettings } from '../../enum/account.settings';
 
 const Settings = () => {
-
+  // Fetching user data using a query hook from RTK Query
   const {
     data: user,
     error,
@@ -12,11 +12,13 @@ const Settings = () => {
     refetch,
   } = userAPI.useFetchUserQuery();
 
+  // Mutation hooks for toggling various account settings
   const [toggleAccountExpired] = userAPI.useToggleAccountExpiredMutation();
   const [toggleAccountLocked] = userAPI.useToggleAccountLockedMutation();
   const [toggleAccountEnabled] = userAPI.useToggleAccountEnabledMutation();
   const [toggleCredentialsExpired] = userAPI.useToggleCredentialsExpiredMutation();
 
+  // Function to toggle account settings based on the provided setting type
   const toggleSettings = async (settings: AccountSettings) => {
     switch (settings) {
       case AccountSettings.EXPIRED:
@@ -32,13 +34,12 @@ const Settings = () => {
         await toggleCredentialsExpired();
         break;
     }
-  }
+  };
 
   return (
-    // TODO
-
-    <div>Settings</div>
-  )
+    // TODO: Implement the UI for managing account settings
+    <div>Settings</div> // Placeholder div to be replaced with actual content
+  );
 }
 
-export default Settings
+export default Settings;
