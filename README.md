@@ -1,30 +1,139 @@
-# React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# The Vergov App
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+**Project Name** is a modern web application designed to [describe main purpose and functionality of the app]. This application provides users with [key features], utilizing React for the frontend and Redux Toolkit for state management.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **User Management**: Register, login, and manage user profiles with support for roles and multi-factor authentication.
+- **Paper Management**: Upload, download, and manage paper documents.
+- **Secure Authentication**: Encrypted password reset and verification processes.
+- **Toast Notifications**: User-friendly notifications for success, errors, and information.
 
-- Configure the top-level `parserOptions` property like this:
+## Technologies Used
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- **Frontend**: React, TypeScript, Redux Toolkit, React Toastify
+- **Backend**: [Specify the backend technology if relevant, e.g., Node.js, Spring Boot]
+- **API**: RESTful API with endpoints for user and paper management
+- **State Management**: Redux Toolkit
+- **Styling**: [Specify if applicable, e.g., CSS, SCSS, Material-UI]
+
+## Installation
+
+### Prerequisites
+
+- Node.js (v14.x or later)
+- npm or Yarn
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/your-username/your-repository.git
+cd your-repository
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Install Dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### Configure Environment Variables
+
+Create a `.env` file in the root directory and add the following environment variables:
+
+```env
+REACT_APP_API_BASE_URL=http://localhost:8085
+```
+
+### Running the Application
+
+To start the development server:
+
+```bash
+npm start
+# or
+yarn start
+```
+
+The application will be available at `http://localhost:3000`.
+
+### Running Tests
+
+To run unit and integration tests:
+
+```bash
+npm test
+# or
+yarn test
+```
+
+### Building for Production
+
+To create a production build:
+
+```bash
+npm run build
+# or
+yarn build
+```
+
+The production build will be available in the `build` directory.
+
+## Usage
+
+### API Endpoints
+
+- **User Management**:
+  - `GET /profile`: Fetch user profile
+  - `POST /login`: Log in user
+  - `POST /register`: Register new user
+  - `POST /reset-password`: Request password reset
+  - `POST /reset-password/reset`: Reset password
+  - `PATCH /update`: Update user details
+  - `PATCH /update-password`: Update user password
+  - `PATCH /photo`: Update user profile photo
+  - `PATCH /mfa/setup`: Enable multi-factor authentication
+  - `PATCH /mfa/cancle`: Disable multi-factor authentication
+
+- **Paper Management**:
+  - `GET /search`: Fetch papers with pagination and search
+  - `POST /upload`: Upload new papers
+  - `GET /:paperId`: Fetch specific paper details
+  - `PATCH /update`: Update paper details
+  - `GET /download/:paperName`: Download paper
+
+### Toast Notifications
+
+- **Info**: `toastInfo("Your message here")`
+- **Success**: `toastSuccess("Your message here")`
+- **Warning**: `toastWarning("Your message here")`
+- **Error**: `toastError("Your message here")`
+
+## Contributing
+
+We welcome contributions to this project! To contribute:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Commit your changes (`git commit -am 'Add feature'`).
+4. Push to the branch (`git push origin feature-branch`).
+5. Create a new Pull Request.
+
+Please ensure that your code adheres to the project's coding style and includes appropriate tests.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Contact
+
+For questions or issues, please reach out to vergovmiroslav@gmail.com or open an issue in the GitHub repository.
+
+---
+
+Feel free to adapt the details based on your project specifics and any additional sections you think are necessary. This template provides a thorough overview of the project setup, usage, and contribution guidelines.
