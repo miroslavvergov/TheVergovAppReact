@@ -1,5 +1,6 @@
 import { Key } from "../enum/cache.key";
 import { IResponse } from "../models/IResponse";
+import { toastError, toastSuccess } from "../services/ToastService";
 
 export const baseUrl = "http:/localhost:8085/user";
 
@@ -23,7 +24,7 @@ export const processResponse = <T>(
     localStorage.removeItem(Key.LOGGEDIN);
   }
   if (request.url.includes("profile")) {
-    // TODO show toast notification
+    toastSuccess(response.message);
   }
   console.log({ response });
   return response;
@@ -41,7 +42,7 @@ export const processError = (
   ) {
     localStorage.setItem(Key.LOGGEDIN, 'false');
   }
-  // TODO show toast notification
+  toastError(error.data.message);
   console.log({ error });
   return error;
 };

@@ -200,6 +200,15 @@ export const userAPI = createApi({
       }),
       transformResponse: processResponse<Users>,
       transformErrorResponse: processError
+    }),
+    logout: builder.mutation<IResponse<void>, void>({
+      query: () => ({
+        url: `/logout`,
+        method: Http.POST
+      }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => (error ? [] : ["User"])
     })
   }),
 });
