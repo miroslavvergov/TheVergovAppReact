@@ -1,7 +1,9 @@
-import React from 'react'
+import { userAPI } from "../../services/UserService"
 
-function Users() {
+const Users = () => {
+  const { data: users, error, isLoading, isSuccess } = userAPI.useGetUsersQuery();
   return (
+    // TODO
     <div>Users</div>
   )
 }

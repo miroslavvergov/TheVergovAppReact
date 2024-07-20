@@ -6,7 +6,7 @@ import {
   processError,
   processResponse,
 } from "../utils/requestutils";
-import { QrCodeRequest, Role, User } from "../models/IUser";
+import { QrCodeRequest, Role, User, Users } from "../models/IUser";
 import { EmailAddress, IRegisterRequest, IUserRequest, UpdateNewPassword, UpdatePassword } from "../models/ICredentials";
 import { Http } from "../enum/http.method";
 
@@ -180,7 +180,7 @@ export const userAPI = createApi({
         url: `/mfa/setup`,
         method: Http.PATCH
       }),
-      transformResponse: processResponse<void>,
+      transformResponse: processResponse<User>,
       transformErrorResponse: processError,
       invalidatesTags: (result, error) => (error ? [] : ["User"])
     }),
@@ -192,6 +192,14 @@ export const userAPI = createApi({
       transformResponse: processResponse<void>,
       transformErrorResponse: processError,
       invalidatesTags: (result, error) => (error ? [] : ["User"])
+    }),
+    getUsers: builder.mutation<IResponse<Users>, void>({
+      query: () => ({
+        url: `/list`,
+        method: Http.GET
+      }),
+      transformResponse: processResponse<Users>,
+      transformErrorResponse: processError
     })
   }),
 });
