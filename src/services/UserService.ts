@@ -1,251 +1,201 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { IResponse } from "../models/IResponse";
-import {
-  baseUrl,
-  isJsonContentType,
-  processError,
-  processResponse,
-} from "../utils/requestutils";
+import { baseUrl, isJsonContentType, processError, processResponse } from "../utils/requestutils";
 import { QrCodeRequest, Role, User, Users } from "../models/IUser";
 import { EmailAddress, IRegisterRequest, IUserRequest, UpdateNewPassword, UpdatePassword } from "../models/ICredentials";
 import { Http } from "../enum/http.method";
 
-// Define the API slice for user-related operations
+
 export const userAPI = createApi({
-  reducerPath: "userAPI",
-  baseQuery: fetchBaseQuery({
-    baseUrl,                 // Base URL for API requests
-    credentials: "include",  // Include credentials (cookies) in requests
-    isJsonContentType,       // Custom function to set Content-Type header
-  }),
-  tagTypes: ["User"],       // Tag type used for invalidating and refetching data
+  reducerPath: 'userAPI',
+  baseQuery: fetchBaseQuery({ baseUrl, credentials: 'include', isJsonContentType }),
+  tagTypes: ['User'],
   endpoints: (builder) => ({
-    // Fetch the current user's profile information
-    fetchUser: builder.query<IResponse<User>, IUserRequest>({
+    fetchUser: builder.query<IResponse<User>, void>({
       query: () => ({
-        url: "/profile", // Endpoint for fetching user profile
-        method: Http.GET, // HTTP method
+        url: '/profile',
+        method: Http.GET
       }),
-      keepUnusedDataFor: 120, // Cache data for 120 seconds
-      transformResponse: processResponse<User>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      providesTags: (result, error) => ["User"], // Tag for cache invalidation
+      keepUnusedDataFor: 120,
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      providesTags: (result, error) => ['User']
     }),
-    
-    // Log in a user with credentials
-    loginUser: builder.mutation<IResponse<User>, void>({
+    loginUser: builder.mutation<IResponse<User>, IUserRequest>({
       query: (credentials) => ({
-        url: "/login", // Endpoint for logging in
-        method: Http.POST, // HTTP method
-        body: credentials, // Request body with user credentials
+        url: '/login',
+        method: Http.POST,
+        body: credentials
       }),
-      transformResponse: processResponse<User>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError
     }),
-    
-    // Register a new user
     registerUser: builder.mutation<IResponse<void>, IRegisterRequest>({
       query: (registerRequest) => ({
-        url: "/register", // Endpoint for user registration
-        method: Http.POST, // HTTP method
-        body: registerRequest, // Request body with registration details
+        url: '/register',
+        method: Http.POST,
+        body: registerRequest
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError
     }),
-
-    // Verify user account using a token
     verifyAccount: builder.mutation<IResponse<void>, string>({
-      query: (token) => ({
-        url: `/verify/account?token=${token}`, // Endpoint for account verification
-        method: Http.GET, // HTTP method
+      query: (key) => ({
+        url: `/verify/account?key=${key}`,
+        method: Http.GET
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError
     }),
-    
-    // Verify user password using a token
     verifyPassword: builder.mutation<IResponse<User>, string>({
-      query: (token) => ({
-        url: `/verify/password?token=${token}`, // Endpoint for password verification
-        method: Http.GET, // HTTP method
+      query: (key) => ({
+        url: `/verify/password?key=${key}`,
+        method: Http.GET
       }),
-      transformResponse: processResponse<User>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Verify a QR code
     verifyQrCode: builder.mutation<IResponse<User>, QrCodeRequest>({
       query: (qrCodeRequest) => ({
-        url: "/verify/qrcode", // Endpoint for QR code verification
-        method: Http.POST, // HTTP method
-        body: qrCodeRequest, // Request body with QR code details
+        url: '/verify/qrcode',
+        method: Http.POST,
+        body: qrCodeRequest
       }),
-      transformResponse: processResponse<User>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Reset the user's password using email
     resetPassword: builder.mutation<IResponse<void>, EmailAddress>({
       query: (email) => ({
-        url: "/reset-password", // Endpoint for password reset
-        method: Http.POST, // HTTP method
-        body: email, // Request body with email address
+        url: '/resetpassword',
+        method: Http.POST,
+        body: email
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Perform the actual password reset with new password
     doResetPassword: builder.mutation<IResponse<void>, UpdateNewPassword>({
       query: (passwordrequest) => ({
-        url: `/reset-password/reset`, // Endpoint for performing password reset
-        method: Http.POST, // HTTP method
-        body: passwordrequest, // Request body with new password details
+        url: `/resetpassword/reset`,
+        method: Http.POST,
+        body: passwordrequest
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Update the user's profile photo
     updatePhoto: builder.mutation<IResponse<string>, FormData>({
       query: (form) => ({
-        url: `/photo`, // Endpoint for updating profile photo
-        method: Http.PATCH, // HTTP method
-        body: form, // Request body with photo data
+        url: `/photo`,
+        method: Http.PATCH,
+        body: form
       }),
-      transformResponse: processResponse<string>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<string>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Update the user's profile information
     updateUser: builder.mutation<IResponse<User>, IUserRequest>({
       query: (user) => ({
-        url: `/update`, // Endpoint for updating user profile
-        method: Http.PATCH, // HTTP method
-        body: user, // Request body with updated user details
+        url: `/update`,
+        method: Http.PATCH,
+        body: user
       }),
-      transformResponse: processResponse<User>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Update the user's password
     updatePassword: builder.mutation<IResponse<void>, UpdatePassword>({
       query: (request) => ({
-        url: `/update-password`, // Endpoint for updating password
-        method: Http.PATCH, // HTTP method
-        body: request, // Request body with new password details
+        url: `/updatepassword`,
+        method: Http.PATCH,
+        body: request
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Toggle the account's expired status
     toggleAccountExpired: builder.mutation<IResponse<void>, void>({
       query: () => ({
-        url: `/toggle-account-expired`, // Endpoint for toggling account expired status
-        method: Http.PATCH, // HTTP method
+        url: `/toggleaccountexpired`,
+        method: Http.PATCH
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Toggle the account's locked status
     toggleAccountLocked: builder.mutation<IResponse<void>, void>({
       query: () => ({
-        url: `/toggle-account-locked`, // Endpoint for toggling account locked status
-        method: Http.PATCH, // HTTP method
+        url: `/toggleaccountlocked`,
+        method: Http.PATCH
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Toggle the account's enabled status
     toggleAccountEnabled: builder.mutation<IResponse<void>, void>({
       query: () => ({
-        url: `/toggle-account-enabled`, // Endpoint for toggling account enabled status
-        method: Http.PATCH, // HTTP method
+        url: `/toggleaccountenabled`,
+        method: Http.PATCH
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Toggle the account's credentials expired status
     toggleCredentialsExpired: builder.mutation<IResponse<void>, void>({
       query: () => ({
-        url: `/toggle-credentials-expired`, // Endpoint for toggling credentials expired status
-        method: Http.PATCH, // HTTP method
+        url: `/togglecredentialsexpired`,
+        method: Http.PATCH
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Update the user's role
     updateRole: builder.mutation<IResponse<void>, Role>({
       query: (role) => ({
-        url: `/update-role`, // Endpoint for updating user role
-        method: Http.PATCH, // HTTP method
-        body: role, // Request body with new role
+        url: `/updaterole`,
+        method: Http.PATCH,
+        body: role
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Enable multi-factor authentication (MFA) for the user
     enableMfa: builder.mutation<IResponse<User>, void>({
       query: () => ({
-        url: `/mfa/setup`, // Endpoint for enabling MFA
-        method: Http.PATCH, // HTTP method
+        url: `/mfa/setup`,
+        method: Http.PATCH
       }),
-      transformResponse: processResponse<User>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Disable multi-factor authentication (MFA) for the user
-    disableMfa: builder.mutation<IResponse<void>, void>({
+    disableMfa: builder.mutation<IResponse<User>, void>({
       query: () => ({
-        url: `/mfa/cancle`, // Endpoint for disabling MFA
-        method: Http.PATCH, // HTTP method
+        url: `/mfa/cancel`,
+        method: Http.PATCH
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
+      transformResponse: processResponse<User>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => error ? [] : ['User']
     }),
-    
-    // Fetch a list of users (admin functionality)
-    getUsers: builder.mutation<IResponse<Users>, void>({
+    getUsers: builder.query<IResponse<Users>, void>({
       query: () => ({
-        url: `/list`, // Endpoint for fetching user list
-        method: Http.GET, // HTTP method
+        url: `/list`,
+        method: Http.GET
       }),
-      transformResponse: processResponse<Users>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
+      transformResponse: processResponse<Users>,
+      transformErrorResponse: processError
     }),
-    
-    // Log out the current user
     logout: builder.mutation<IResponse<void>, void>({
       query: () => ({
-        url: `/logout`, // Endpoint for logging out
-        method: Http.POST, // HTTP method
+        url: `/logout`,
+        method: Http.POST
       }),
-      transformResponse: processResponse<void>, // Transform the response data
-      transformErrorResponse: processError, // Transform error responses
-      invalidatesTags: (result, error) => (error ? [] : ["User"]), // Invalidate cache on success
-    })
-  }),
+      transformResponse: processResponse<void>,
+      transformErrorResponse: processError,
+      invalidatesTags: (result, error) => ['User']
+    }),
+  })
 });

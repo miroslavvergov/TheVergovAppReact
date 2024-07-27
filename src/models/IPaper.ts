@@ -33,4 +33,4 @@ export type Query = {
 };
 
 // Type representing a subset of paper properties for form usage
-export type PaperForm = Pick<IPaper, 'name' | 'description' | 'paperId' | 'size' | 'updaterName' | 'createdAt' | 'updatedAt'>;
+export type PaperForm = Pick<IPaper, 'name' | 'description' | 'paperId' | 'size' | 'formattedSize' | 'uri' | 'updaterName' | 'createdAt' | 'updatedAt'>;
