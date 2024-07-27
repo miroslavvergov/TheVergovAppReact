@@ -1,12 +1,21 @@
-import React from 'react';
+import React from 'react'
 
-function Loader() {
-    return (
-        // TODO: Implement a proper loading spinner or animation
-        <div>
-            {/* Placeholder div to be replaced with actual loading indicator */}
-        </div>
-    );
+const Loader = () => {
+  return (
+    <>
+      <h4 className="mb-3">Loading...</h4>
+      <hr />
+      <p className="card-text placeholder-glow">
+        <span className="placeholder col-12"></span>
+        <span className="placeholder col-12"></span>
+        <span className="placeholder col-12"></span>
+        <span className="placeholder col-12"></span>
+        <span className="placeholder col-12"></span>
+        <span className="placeholder col-12"></span>
+        <span className="placeholder col-12"></span>
+      </p>
+    </>
+  )
 }
 
 export default Loader;
