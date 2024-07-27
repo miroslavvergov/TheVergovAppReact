@@ -1,37 +1,40 @@
-import React from "react";
-import { userAPI } from "../services/UserService";
-import { Outlet, Navigate } from "react-router-dom";
+import { userAPI } from '../services/UserService';
+import { Link, Outlet } from 'react-router-dom';
 
-function Restricted() {
-  // Fetch user data and manage loading and error states
-  const {
-    data: userData,
-    error,
-    isLoading,
-    refetch,
-  } = userAPI.useFetchUserQuery(undefined, { refetchOnMountOrArgChange: true });
+const Restricted = () => {
+  const { data: userData, error, isLoading, refetch } = userAPI.useFetchUserQuery(undefined, { refetchOnMountOrArgChange: true });
 
-  // Show a loading indicator while the user data is being fetched
-  if (isLoading) {
+  if (isLoading || !userData) {
     return (
-      // TODO: Replace with a proper loading component or message
-      <div>Loading...</div>
-    );
+      <div className="container py-5" style={{ marginTop: '100px' }}>
+        <div className="row">
+          <div className="col text-center">
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+    )
   }
-
-  // Handle errors (if any) that occur during data fetching
-  if (error) {
-    // TODO: Add error handling logic (e.g., display an error message)
-    return <div>Error loading user data</div>;
-  }
-
-  // Check if user data is available and determine if the user has the appropriate role
-  if (userData && (userData.data.user.role === 'ADMIN' || userData.data.user.role === 'SUPER_ADMIN')) {
-    // Render child routes if the user has the required role
-    return <Outlet />;
+  if (userData.data.user.role === 'ADMIN' || userData.data.user.role === 'SUPER_ADMIN') {
+    return <Outlet />
   } else {
-    // Redirect to a different page or show an unauthorized message if the user doesn't have the required role
-    return <Navigate to="/unauthorized" replace />;
+    return (
+      <div className="container py-5" style={{ marginTop: '100px' }}>
+        <div className="row">
+          <div className="col-md-2 text-center">
+            <p>
+              <i className="bi bi-exclamation-octagon text-warning" style={{ fontSize: '50px' }}></i><br />
+              Status Code: 403
+            </p>
+          </div>
+          <div className="col-md-10">
+            <h3>ACCESS DENIED</h3>
+            <p>Access to this page is denied due to lack of permissions.</p>
+            <Link to={'/'} className="btn btn-primary">Go Back To Home</Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 }
 

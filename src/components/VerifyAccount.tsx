@@ -1,53 +1,117 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { userAPI } from '../services/UserService';
+import { IResponse } from '../models/IResponse';
 
-function VerifyAccount() {
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const token = searchParams.get('token');
+const VerifyAccount = () => {
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const key = searchParams.get('key');
+    const [verifyAccount, { data: accountData, error: accountError, isLoading: accountLoading, isSuccess: accountSuccess }] = userAPI.useVerifyAccountMutation();
 
-  const [verifyAccount, { data: accountData, error: accountError, isLoading: accountLoading, isSuccess: accountSuccess }] =
-    userAPI.useVerifyAccountMutation();
+    React.useEffect(() => {
+        if (key && location.pathname.includes('/verify/account')) {
+            verifyAccount(key);
+        }
+    }, []);
 
-  React.useEffect(() => {
-    if (token && location.pathname.includes('/verify/account')) {
-      verifyAccount(token);
+    if (!key) {
+        return (
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-lg-6 col-md-6 col-sm-12" style={{ marginTop: '100px' }}>
+                        <div className="card">
+                            <div className="card-body">
+                                <div className="alert alert-dismissible alert-danger">
+                                    Invalid link. Please check the link and try again.
+                                </div>
+                                <hr className="my-3" />
+                                <div className="row mb-3">
+                                    <div className="col d-flex justify-content-start">
+                                        <div className="btn btn-outline-light">
+                                            <Link to="/login" style={{ textDecoration: 'none' }}>Go to login</Link>
+                                        </div>
+                                    </div>
+                                    <div className="col d-flex justify-content-end">
+                                        <div className="link-dark">
+                                            <Link to="/resetpassword">Forgot password?</Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
     }
-  }, [token, location.pathname, verifyAccount]);
 
-  if (accountLoading) {
-    return (
-      // TODO: Replace with a proper loading component or message
-      <div>Loading...</div>
-    );
-  }
+    if (key && !accountSuccess) {
+        return (
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-lg-6 col-md-6 col-sm-12" style={{ marginTop: '100px' }}>
+                        <div className="card">
+                            <div className="card-body">
+                                {accountError && <div className="alert alert-dismissible alert-danger">
+                                    {'data' in accountError ? (accountError.data as IResponse<void>).message! : 'An error occurred'}
+                                </div>}
+                                <div className="d-flex align-items-center">
+                                    {!accountError && <><strong role="status">Please wait. Verifying...</strong>
+                                        <div className="spinner-border ms-auto" aria-hidden="true"></div></>}
+                                </div>
+                                {accountError && <>
+                                    <hr className="my-3" />
+                                    <div className="row mb-3">
+                                        <div className="col d-flex justify-content-start">
+                                            <div className="btn btn-outline-light">
+                                                <Link to="/login" style={{ textDecoration: 'none' }}>Go to login</Link>
+                                            </div>
+                                        </div>
+                                        <div className="col d-flex justify-content-end">
+                                            <div className="link-dark">
+                                                <Link to="/resetpassword">Forgot password?</Link>
+                                            </div>
+                                        </div>
+                                    </div></>}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
-  if (!token) {
-    return (
-      // TODO: Add a message for when the token is not present
-      <div>No token provided. Please check the verification link.</div>
-    );
-  }
-
-  if (accountSuccess) {
-    return (
-      // TODO: Add a success message or redirect to login
-      <div>Your account has been successfully verified!</div>
-    );
-  }
-
-  if (accountError) {
-    return (
-      // TODO: Add an error message or additional error handling
-      <div>There was an error verifying your account. Please try again.</div>
-    );
-  }
-
-  return (
-    // TODO: Add a default state if needed
-    <div>Processing...</div>
-  );
+    if (accountSuccess && location.pathname.includes('/verify/account')) {
+        return (
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-lg-6 col-md-6 col-sm-12" style={{ marginTop: '100px' }}>
+                        <div className="card">
+                            <div className="card-body">
+                                <div className="alert alert-dismissible alert-success">
+                                    Account verified. You can log in now.
+                                </div>
+                                <hr className="my-3" />
+                                <div className="row mb-3">
+                                    <div className="col d-flex justify-content-start">
+                                        <div className="btn btn-outline-light">
+                                            <Link to="/login" style={{ textDecoration: 'none' }}>Go to login</Link>
+                                        </div>
+                                    </div>
+                                    <div className="col d-flex justify-content-end">
+                                        <div className="link-dark">
+                                            <Link to="/resetpassword">Forgot password?</Link>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 }
 
 export default VerifyAccount;
