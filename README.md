@@ -1,76 +1,62 @@
+### README for TheVergovAppReact
 
-# The Vergov App
+# The Vergov App React Frontend
 
-## Overview
+This repository contains the front-end of the Vergov Application, a platform for managing users, roles, and content. The front-end is built using React and TypeScript, providing a user interface for interacting with the backend API, which is hosted separately. You can find the server-side code for the application [here](https://github.com/miroslavvergov/TheVergovAppSpring).
 
-**Project Name** is a modern web application designed to [describe main purpose and functionality of the app]. This application provides users with [key features], utilizing React for the frontend and Redux Toolkit for state management.
+## Table of Contents
 
-## Features
-
-- **User Management**: Register, login, and manage user profiles with support for roles and multi-factor authentication.
-- **Paper Management**: Upload, download, and manage paper documents.
-- **Secure Authentication**: Encrypted password reset and verification processes.
-- **Toast Notifications**: User-friendly notifications for success, errors, and information.
+- [Technologies Used](#technologies-used)
+- [Setup Instructions](#setup-instructions)
+- [Project Structure](#project-structure)
+- [Routing](#routing)
+- [Backend Integration](#backend-integration)
+- [Scripts](#scripts)
+- [License](#license)
 
 ## Technologies Used
 
-- **Frontend**: React, TypeScript, Redux Toolkit, React Toastify
-- **Backend**: [Specify the backend technology if relevant, e.g., Node.js, Spring Boot]
-- **API**: RESTful API with endpoints for user and paper management
-- **State Management**: Redux Toolkit
-- **Styling**: [Specify if applicable, e.g., CSS, SCSS, Material-UI]
+- **React 18.3.1**
+- **TypeScript**
+- **Vite** (for bundling and development server)
+- **React Router DOM 6.25.0** (for routing)
+- **Redux Toolkit** (for state management)
+- **React Hook Form** (for form management)
+- **Zod** (for schema validation)
+- **React Toastify** (for notifications)
+- **ESLint** (for linting)
+- **Docker** (optional, for containerization)
 
-## Installation
+## Setup Instructions
 
 ### Prerequisites
 
-- Node.js (v14.x or later)
-- npm or Yarn
+- **Node.js 18.x** or higher
+- **npm 9.x** or higher (comes with Node.js)
+- **Vite** (already included in dev dependencies)
 
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/your-repository.git
-cd your-repository
+git clone https://github.com/yourusername/TheVergovAppReact.git
+cd TheVergovAppReact
 ```
 
 ### Install Dependencies
 
 ```bash
 npm install
-# or
-yarn install
 ```
 
-### Configure Environment Variables
-
-Create a `.env` file in the root directory and add the following environment variables:
-
-```env
-REACT_APP_API_BASE_URL=http://localhost:8085
-```
-
-### Running the Application
+### Running the Application in Development Mode
 
 To start the development server:
 
 ```bash
-npm start
-# or
-yarn start
+npm run dev
 ```
 
-The application will be available at `http://localhost:3000`.
-
-### Running Tests
-
-To run unit and integration tests:
-
-```bash
-npm test
-# or
-yarn test
-```
+This will start the application on `http://localhost:5173` (or another available port).
 
 ### Building for Production
 
@@ -78,62 +64,76 @@ To create a production build:
 
 ```bash
 npm run build
-# or
-yarn build
 ```
 
-The production build will be available in the `build` directory.
+The build output will be generated in the `dist` directory.
 
-## Usage
+### Previewing the Production Build
 
-### API Endpoints
+To preview the production build locally:
 
-- **User Management**:
-  - `GET /profile`: Fetch user profile
-  - `POST /login`: Log in user
-  - `POST /register`: Register new user
-  - `POST /reset-password`: Request password reset
-  - `POST /reset-password/reset`: Reset password
-  - `PATCH /update`: Update user details
-  - `PATCH /update-password`: Update user password
-  - `PATCH /photo`: Update user profile photo
-  - `PATCH /mfa/setup`: Enable multi-factor authentication
-  - `PATCH /mfa/cancle`: Disable multi-factor authentication
+```bash
+npm run preview
+```
 
-- **Paper Management**:
-  - `GET /search`: Fetch papers with pagination and search
-  - `POST /upload`: Upload new papers
-  - `GET /:paperId`: Fetch specific paper details
-  - `PATCH /update`: Update paper details
-  - `GET /download/:paperName`: Download paper
+This will serve the production build locally for testing purposes.
 
-### Toast Notifications
+## Project Structure
 
-- **Info**: `toastInfo("Your message here")`
-- **Success**: `toastSuccess("Your message here")`
-- **Warning**: `toastWarning("Your message here")`
-- **Error**: `toastError("Your message here")`
+- **`src/`**: Main source code directory.
+  - **`components/`**: Reusable React components.
+  - **`pages/`**: Page components corresponding to different routes.
+  - **`hooks/`**: Custom React hooks.
+  - **`store/`**: Redux store setup and slices.
+  - **`utils/`**: Utility functions.
+  - **`App.tsx`**: Main application component.
+  - **`index.tsx`**: Entry point for the React application.
+  - **`router.tsx`**: Defines the application routes.
+  
+- **`tsconfig.json`**: TypeScript configuration file.
+- **`vite.config.ts`**: Vite configuration file.
 
-## Contributing
+## Routing
 
-We welcome contributions to this project! To contribute:
+The application uses `React Router DOM` for client-side routing. The main routes are defined in the `router.tsx` file.
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Commit your changes (`git commit -am 'Add feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Create a new Pull Request.
+### Key Routes
 
-Please ensure that your code adheres to the project's coding style and includes appropriate tests.
+- **`/login`**: Login page.
+- **`/register`**: User registration page.
+- **`/resetpassword`**: Password reset page.
+- **`/verify/account`**: Account verification page.
+- **`/verify/password`**: Password verification page.
+- **`/papers`**: Lists all papers (protected route).
+- **`/papers/:paperId`**: Displays details of a specific paper.
+- **`/users`**: User management page (restricted to certain roles).
+- **`/user/profile`**: User profile page.
+- **`/user/password`**: Password management page.
+- **`/user/settings`**: User settings page.
+- **`/user/authorization`**: Authorization settings.
+- **`/user/authentication`**: Authentication settings.
+- **`*`**: 404 Not Found page.
+
+### Protected and Restricted Routes
+
+- **ProtectedRoute**: Ensures that only authenticated users can access certain routes.
+- **Restricted**: Further restricts access based on user roles.
+
+## Backend Integration
+
+The front-end interacts with the backend API hosted on `http://localhost:8085`. The base URL for API requests is defined in the application as `baseUrl`. Key API endpoints include:
+
+- **`/papers`**: CRUD operations for papers.
+- **`/users`**: User management.
+- **`/auth`**: Authentication and authorization.
+
+## Scripts
+
+- **`npm run dev`**: Starts the development server.
+- **`npm run build`**: Builds the project for production.
+- **`npm run preview`**: Previews the production build.
+- **`npm run lint`**: Runs ESLint to lint the codebase.
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
-
-## Contact
-
-For questions or issues, please reach out to vergovmiroslav@gmail.com or open an issue in the GitHub repository.
-
----
-
-Feel free to adapt the details based on your project specifics and any additional sections you think are necessary. This template provides a thorough overview of the project setup, usage, and contribution guidelines.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
