@@ -1,3 +1,5 @@
+import { IUser } from "./IUser";
+
 // Interface representing the request payload for user login or authentication
 export interface IUserRequest {
   email: string;    // The user's email address, required for login
